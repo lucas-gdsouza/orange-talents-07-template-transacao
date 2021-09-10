@@ -1,14 +1,21 @@
-package br.com.zupacademy.transacao.response;
+package br.com.zupacademy.transacao.kafka.consumers;
 
+import br.com.zupacademy.transacao.models.EstabelecimentoModel;
+
+import javax.validation.constraints.NotNull;
 import java.util.StringJoiner;
 
-public class EstabelecimentoResponse {
+public class EstabelecimentoConsumer {
 
     private String nome;
     private String cidade;
     private String endereco;
 
-    public EstabelecimentoResponse(String nome, String cidade, String endereco) {
+    @Deprecated
+    public EstabelecimentoConsumer() {
+    }
+
+    public EstabelecimentoConsumer(String nome, String cidade, String endereco) {
         this.nome = nome;
         this.cidade = cidade;
         this.endereco = endereco;
@@ -26,9 +33,13 @@ public class EstabelecimentoResponse {
         return endereco;
     }
 
+    public @NotNull EstabelecimentoModel toModel() {
+        return new EstabelecimentoModel(this.nome, this.cidade, this.endereco);
+    }
+
     @Override
     public String toString() {
-        return new StringJoiner(", ", EstabelecimentoResponse.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", EstabelecimentoConsumer.class.getSimpleName() + "[", "]")
                 .add("nome='" + nome + "'")
                 .add("cidade='" + cidade + "'")
                 .add("endereco='" + endereco + "'")

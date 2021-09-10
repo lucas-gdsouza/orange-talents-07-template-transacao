@@ -1,14 +1,12 @@
-package br.com.zupacademy.transacao.domains;
+package br.com.zupacademy.transacao.models;
 
 import org.springframework.util.Assert;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
 @Embeddable
-@Table(name = "Estabelecimentos")
 public class EstabelecimentoModel {
 
     @Column(nullable = false)
@@ -42,5 +40,17 @@ public class EstabelecimentoModel {
         Assert.hasText(nome, "Necessário preencher o parâmetro 'nome'");
         Assert.hasText(cidade, "Necessário preencher o parâmetro 'cidade'");
         Assert.hasText(endereco, "Necessário preencher o parâmetro 'endereco'");
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public String getEndereco() {
+        return endereco;
     }
 }

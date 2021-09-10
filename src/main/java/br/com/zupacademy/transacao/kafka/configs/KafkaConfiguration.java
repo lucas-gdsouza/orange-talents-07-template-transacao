@@ -1,6 +1,6 @@
-package br.com.zupacademy.transacao.consumer;
+package br.com.zupacademy.transacao.kafka.configs;
 
-import br.com.zupacademy.transacao.response.TransacaoResponse;
+import br.com.zupacademy.transacao.kafka.consumers.TransacaoConsumer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.autoconfigure.kafka.KafkaProperties;
@@ -43,9 +43,9 @@ public class KafkaConfiguration {
      */
 
     @Bean
-    public ConsumerFactory<String, TransacaoResponse> transactionConsumerFactory() {
+    public ConsumerFactory<String, TransacaoConsumer> transactionConsumerFactory() {
         StringDeserializer stringDeserializer = new StringDeserializer();
-        JsonDeserializer<TransacaoResponse> jsonDeserializer = new JsonDeserializer<>(TransacaoResponse.class, false);
+        JsonDeserializer<TransacaoConsumer> jsonDeserializer = new JsonDeserializer<>(TransacaoConsumer.class, false);
 
         return new DefaultKafkaConsumerFactory<>(consumerConfigurations(), stringDeserializer, jsonDeserializer);
     }
@@ -57,8 +57,8 @@ public class KafkaConfiguration {
      */
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, TransacaoResponse> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, TransacaoResponse> factory = new ConcurrentKafkaListenerContainerFactory<>();
+    public ConcurrentKafkaListenerContainerFactory<String, TransacaoConsumer> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, TransacaoConsumer> factory = new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(transactionConsumerFactory());
 
         return factory;

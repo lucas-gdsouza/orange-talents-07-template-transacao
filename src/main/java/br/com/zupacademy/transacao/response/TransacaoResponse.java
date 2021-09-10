@@ -1,54 +1,46 @@
 package br.com.zupacademy.transacao.response;
 
+import br.com.zupacademy.transacao.models.TransacaoModel;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.StringJoiner;
 
 public class TransacaoResponse {
 
-    private String id;
+    @NotBlank
+    private String uuid;
+
+    @NotBlank
     private BigDecimal valor;
-    private EstabelecimentoResponse estabelecimento;
-    private CartaoResponse cartao;
+
+    @NotBlank
+    private String estabelecimento;
+
+    @NotNull
     private LocalDateTime efetivadaEm;
 
-    public TransacaoResponse(String id, BigDecimal valor, EstabelecimentoResponse estabelecimento,
-                             CartaoResponse cartao, LocalDateTime efetivadaEm) {
-        this.id = id;
-        this.valor = valor;
-        this.estabelecimento = estabelecimento;
-        this.cartao = cartao;
-        this.efetivadaEm = efetivadaEm;
+    public TransacaoResponse(TransacaoModel transacaoModel) {
+        this.uuid = transacaoModel.getUuid();
+        this.valor = transacaoModel.getValor();
+        this.estabelecimento = transacaoModel.getEstabelecimento().getNome();
+        this.efetivadaEm = transacaoModel.getEfetivadaEm();
     }
 
-    public String getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
     public BigDecimal getValor() {
         return valor;
     }
 
-    public EstabelecimentoResponse getEstabelecimento() {
+    public String getEstabelecimento() {
         return estabelecimento;
-    }
-
-    public CartaoResponse getCartao() {
-        return cartao;
     }
 
     public LocalDateTime getEfetivadaEm() {
         return efetivadaEm;
-    }
-
-    @Override
-    public String toString() {
-        return new StringJoiner(", ", TransacaoResponse.class.getSimpleName() + "[", "]")
-                .add("id='" + id + "'")
-                .add("valor=" + valor)
-                .add("estabelecimento=" + estabelecimento)
-                .add("cartao=" + cartao)
-                .add("efetivadaEm=" + efetivadaEm)
-                .toString();
     }
 }

@@ -1,4 +1,4 @@
-package br.com.zupacademy.transacao.domains;
+package br.com.zupacademy.transacao.models;
 
 import org.springframework.util.Assert;
 
@@ -9,15 +9,19 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.StringJoiner;
 
 @Entity
 @Table(name = "Transacoes")
 public class TransacaoModel {
 
-    @Column(nullable = false)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
     @NotBlank
-    private String id;
+    private String uuid;
 
     @Column(nullable = false)
     @NotNull
@@ -28,7 +32,7 @@ public class TransacaoModel {
     @NotNull
     private EstabelecimentoModel estabelecimento;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private CartaoModel cartao;
 
     @PastOrPresent
@@ -41,20 +45,20 @@ public class TransacaoModel {
     public TransacaoModel() {
     }
 
-    public TransacaoModel(@NotBlank String id, @NotNull BigDecimal valor, @NotNull EstabelecimentoModel estabelecimento,
+    public TransacaoModel(@NotBlank String uuid, @NotNull BigDecimal valor, @NotNull EstabelecimentoModel estabelecimento,
                           @NotNull CartaoModel cartao, @NotNull LocalDateTime efetivadaEm) {
-        validarParametros(id, valor, estabelecimento, cartao, efetivadaEm);
+        validarParametros(uuid, valor, estabelecimento, cartao, efetivadaEm);
 
-        this.id = id;
+        this.uuid = uuid;
         this.valor = valor;
         this.estabelecimento = estabelecimento;
         this.cartao = cartao;
         this.efetivadaEm = efetivadaEm;
     }
 
-    private void validarParametros(String id, BigDecimal valor, EstabelecimentoModel estabelecimento,
+    private void validarParametros(String uuid, BigDecimal valor, EstabelecimentoModel estabelecimento,
                                    CartaoModel cartao, LocalDateTime efetivadaEm) {
-        Assert.hasText(id, "Necessário preencher o parâmetro 'id'");
+        Assert.hasText(uuid, "Necessário preencher o parâmetro 'uuid'");
 
         Assert.notNull(valor, "Necessário preencher o parâmetro 'valor'");
         Assert.isTrue(valor.compareTo(new BigDecimal(0)) != -1,
@@ -63,5 +67,40 @@ public class TransacaoModel {
         Assert.notNull(estabelecimento, "Necessário preencher o parâmetro 'estabelecimento'");
         Assert.notNull(cartao, "Necessário preencher o parâmetro 'cartao'");
         Assert.notNull(efetivadaEm, "Necessário preencher o parâmetro 'efetivadaEm'");
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public EstabelecimentoModel getEstabelecimento() {
+        return estabelecimento;
+    }
+
+    public CartaoModel getCartao() {
+        return cartao;
+    }
+
+    public LocalDateTime getEfetivadaEm() {
+        return efetivadaEm;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", TransacaoModel.class.getSimpleName() + "[", "]")
+                .add("uuid='" + uuid + "'")
+                .add("valor=" + valor)
+                .add("estabelecimento=" + estabelecimento.getNome())
+                .add("cartao=" + cartao.getUuid())
+                .add("efetivadaEm=" + efetivadaEm)
+                .toString();
     }
 }
